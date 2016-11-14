@@ -9,6 +9,8 @@ import com.sumames.sir.Main;
 import com.sumames.sir.entity.PurchaseRequest;
 import com.sumames.sir.entity.PurchaseRequestDetail;
 import com.sumames.sir.entity.Employer;
+import com.sumames.sir.entity.Journal;
+import com.sumames.sir.entity.JournalDetail;
 import com.sumames.sir.entity.PurchaseInvoice;
 import com.sumames.sir.entity.PurchasePaymentInvoice;
 import com.sumames.sir.entity.PurchasePayment;
@@ -68,6 +70,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         btSave = new javax.swing.JButton();
         tfNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
@@ -87,6 +92,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         tfTotal = new javax.swing.JTextField();
+        rbcash = new javax.swing.JRadioButton();
+        rbgiro = new javax.swing.JRadioButton();
+        rbbank = new javax.swing.JRadioButton();
 
         setFont(new java.awt.Font("Noto Serif", 0, 14)); // NOI18N
         setOpaque(false);
@@ -206,6 +214,12 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         tfTotal.setEnabled(false);
         tfTotal.setPreferredSize(new java.awt.Dimension(100, 30));
 
+        rbcash.setText("Cash");
+
+        rbgiro.setText("Giro");
+
+        rbbank.setText("Bank");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,11 +252,17 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(rbcash)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rbbank))
+                                    .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(rbgiro))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -269,9 +289,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                 .addComponent(jLabel8)
                                 .addComponent(tfSupplierName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                                     .addComponent(jLabel1)
                                     .addComponent(dtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -279,16 +299,20 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(cbInvoiceNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel9)
                                     .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(37, 37, 37))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(rbcash)
+                                    .addComponent(rbbank))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rbgiro))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -335,6 +359,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btSave;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JComboBox<String> cbInvoiceNo;
     private com.toedter.calendar.JDateChooser dtDate;
     private javax.swing.JLabel jLabel1;
@@ -345,6 +372,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JRadioButton rbbank;
+    private javax.swing.JRadioButton rbcash;
+    private javax.swing.JRadioButton rbgiro;
     private javax.swing.JTextArea taDescription;
     private javax.swing.JTable tbPurchasePayment;
     private javax.swing.JTextField tfNo;
@@ -370,6 +400,72 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                     PaymentDetail.setCreateDatetime(new Date());
                     PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
                     AppUtil.getService().save(PaymentDetail);
+                }
+                    Journal jurnal = new Journal();
+                jurnal.setNo(Support.AutoNumber(AppUtil.getService().getJournalLast(), "J", Boolean.TRUE));
+                jurnal.setDate(new Date());
+                // 0 = Rent
+                // 1 = Purchase Invoice
+                jurnal.setTransactionFrom(1);
+                jurnal.setTransactionRecordId(recordId);
+                jurnal.setCreateDatetime(new Date());
+                jurnal.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                if (AppUtil.getService().save(jurnal)) {
+                    if(rbcash.isSelected()){
+                    JournalDetail jd = new JournalDetail();
+                    jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(02);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                }else if(rbbank.isSelected()){
+                     JournalDetail jd = new JournalDetail();
+                    jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(04);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                }else if(rbgiro.isSelected()){
+                     JournalDetail jd = new JournalDetail();
+                    jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(38);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                }
                 }
                 msg("Save Done!");
                 Main.getFrame().getTab().removeTabAt(Main.getFrame().getTab().getSelectedIndex());
@@ -397,6 +493,75 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                     PaymentDetail.setCreateDatetime(new Date());
                     PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
                     AppUtil.getService().save(PaymentDetail);
+                }
+                
+                     Journal jurnal = new Journal();
+                jurnal.setNo(Support.AutoNumber(AppUtil.getService().getJournalLast(), "J", Boolean.TRUE));
+                jurnal.setDate(new Date());
+                // 0 = Rent
+                // 1 = Purchase Invoice
+                jurnal.setTransactionFrom(1);
+                jurnal.setTransactionRecordId(recordId);
+                jurnal.setCreateDatetime(new Date());
+                jurnal.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                if (AppUtil.getService().save(jurnal)) {
+                       JournalDetail jd = new JournalDetail();
+                      for (int i = 0; i < tbPurchasePayment.getRowCount(); i++) {
+                          if(tbPurchasePayment.getValueAt(i, 2) != null ) {              
+                    jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,2).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(02);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                          }
+                    if(tbPurchasePayment.getValueAt(i, 3) != null){
+                         jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,3).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(04);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                    }
+                    if(tbPurchasePayment.getValueAt(i, 4) != null){
+                         jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,4).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(38);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                    }
+                      }
                 }
                 msg("Save Done!");
                 Main.getFrame().getTab().removeTabAt(Main.getFrame().getTab().getSelectedIndex());
