@@ -17,6 +17,7 @@ import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.AutoCompletion;
 import com.sumames.sir.helper.Support;
 import com.sumames.sir.helper.TextComponentUtils;
+import com.sumames.sir.ui.renderer.DoubleCellRenderer;
 import com.sumames.sir.ui.renderer.TableCellListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -33,6 +34,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -63,6 +65,8 @@ public class RentData extends javax.swing.JPanel {
         this.recordId = recordId;
         initComponents();
         loadingData();
+        nullifyTableValue();
+        cellrenderer();
     }
 
     /**
@@ -226,6 +230,17 @@ public class RentData extends javax.swing.JPanel {
         tfDisc.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tfDiscActionPerformed(evt);
+            }
+        });
+        tfDisc.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfDiscKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfDiscKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfDiscKeyTyped(evt);
             }
         });
         TextComponentUtils.setNumericTextOnly(tfDisc);
@@ -526,6 +541,18 @@ public class RentData extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void tfDiscKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDiscKeyPressed
+
+    }//GEN-LAST:event_tfDiscKeyPressed
+
+    private void tfDiscKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDiscKeyTyped
+
+    }//GEN-LAST:event_tfDiscKeyTyped
+
+    private void tfDiscKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfDiscKeyReleased
+count();
+    }//GEN-LAST:event_tfDiscKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btDelete;
@@ -551,6 +578,14 @@ public class RentData extends javax.swing.JPanel {
     private javax.swing.JTextField tfSubtotal;
     private javax.swing.JTextField tfTotal;
     // End of variables declaration//GEN-END:variables
+   private void nullifyTableValue(){
+       for (int i = 0; i < tbRent.getRowCount(); i++){
+        tbRent.setValueAt(0, i, 2);
+        tbRent.setValueAt(0, i, 4);
+           
+       }
+   }
+    
     private void addRow() {
         DefaultTableModel model = (DefaultTableModel) tbRent.getModel();
         if (model != null) {
@@ -576,13 +611,17 @@ public class RentData extends javax.swing.JPanel {
             cbCarName.addItem(cars.getName());
             cbCarPlate.addItem(cars.getPlateNumber());
         }
-        List<Customer> customerList = AppUtil.getService().getCustomers();
+        List<Customer> customerList = AppUtil.getService().getCustomersNotDeleted();
         for (Customer customers : customerList) {
             customerID.put(customers.getName(), customers.getRecordId());
             cbCustomerName.addItem(customers.getName());
         }
         if (option.equals("NEW")) {
-            tfNo.setText(Support.AutoNumber(AppUtil.getService().getRentLast(), "R", Boolean.TRUE));
+            if(AppUtil.getService().getRentLast() != null){
+                 tfNo.setText(Support.AutoNumber(AppUtil.getService().getRentLast(), "R", Boolean.TRUE)); 
+            }else {
+               tfNo.setText("Error");
+            }
             tfSubtotal.setText("0");
             tfDisc.setText("0");
             tfTotal.setText("0");
@@ -599,7 +638,12 @@ public class RentData extends javax.swing.JPanel {
             refreshTable();
         }
     }
-
+public void cellrenderer(){
+        TableColumnModel m = tbRent.getColumnModel();
+        DoubleCellRenderer dcr = new DoubleCellRenderer();
+        m.getColumn(2).setCellRenderer(dcr);
+          m.getColumn(4).setCellRenderer(dcr);
+    }
     public void refreshTable() {
         List<RentDetail> list = AppUtil.getService().getListRentById(recordId);
         DefaultTableModel dtm = (DefaultTableModel) tbRent.getModel();

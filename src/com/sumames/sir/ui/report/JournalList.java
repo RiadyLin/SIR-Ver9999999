@@ -9,10 +9,12 @@ import com.sumames.sir.Main;
 import com.sumames.sir.entity.Journal;
 import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.Support;
+import com.sumames.sir.ui.renderer.DoubleCellRenderer;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -214,6 +216,10 @@ public class JournalList extends javax.swing.JPanel {
     private void refreshTable() {
             Journals = AppUtil.getService().getJournals();
             tbJournal.setModel(new JournalTableModel(Journals));
+             TableColumnModel m = tbJournal.getColumnModel();
+        DoubleCellRenderer dcr = new DoubleCellRenderer();
+        m.getColumn(3).setCellRenderer(dcr);
+        m.getColumn(4).setCellRenderer(dcr);
             tbJournal.getColumnModel().getColumn(0).setMinWidth(0);
             tbJournal.getColumnModel().getColumn(0).setMaxWidth(0);
 

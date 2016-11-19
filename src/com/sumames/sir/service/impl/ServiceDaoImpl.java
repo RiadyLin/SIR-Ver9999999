@@ -499,15 +499,19 @@ public class ServiceDaoImpl implements ServiceDao {
 //    =================Auto Number==================
     @Override
     public String getRentLast() {
-        Rent last = (Rent) getCurrentSession().createQuery("from Rent a order by a.no ASC").setMaxResults(1).uniqueResult();
+        Rent last = (Rent) getCurrentSession().createQuery("from Rent a order by a.no DESC").setMaxResults(1).uniqueResult();
         String format;
-        format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+       if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
         return format;
     }
 
     @Override
     public String getJournalLast() {
-        Journal last = (Journal) getCurrentSession().createQuery("from Journal a order by a.no ASC").setMaxResults(1).uniqueResult();
+        Journal last = (Journal) getCurrentSession().createQuery("from Journal a order by a.no DESC").setMaxResults(1).uniqueResult();
         String format;
 
         if (last == null) {
@@ -516,6 +520,107 @@ public class ServiceDaoImpl implements ServiceDao {
             format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
         }
         return format;
+    }
+
+    @Override
+    public String getCustomerLast() {
+         Customer last = (Customer) getCurrentSession().createQuery("from Customer a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+         if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+
+    @Override
+    public String getPurchaseRequestLast() {
+        PurchaseRequest last = (PurchaseRequest) getCurrentSession().createQuery("from PurchaseRequest a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+         if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+
+    @Override
+    public String getPurchaseOrderLast() {
+         PurchaseOrder last = (PurchaseOrder) getCurrentSession().createQuery("from PurchaseOrder a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+        if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+    @Override
+    public String getPurchaseInvoiceLast() {
+       PurchaseInvoice last = (PurchaseInvoice) getCurrentSession().createQuery("from PurchaseInvoice a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+        if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+
+    @Override
+    public String getPurchasePaymentLast() {
+       PurchasePayment last = (PurchasePayment) getCurrentSession().createQuery("from PurchasePayment a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+         if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+
+    @Override
+    public String getEmployerLast() {
+        Employer last = (Employer) getCurrentSession().createQuery("from Employer a order by a.no DESC").setMaxResults(1).uniqueResult();
+        String format;
+        if (last == null) {
+            format = "";
+        } else {
+            format = String.format("%03d", Integer.parseInt(last.getNo().substring(last.getNo().length() - 3)));
+        }
+        return format;
+    }
+
+    @Override
+    public List<PurchaseRequest> getRequestNotDeleted() {
+          List<PurchaseRequest> list = getCurrentSession().createQuery("FROM PurchaseRequest a where a.deleteDatetime IS NULL ORDER BY a.recordId ASC").list();
+        return list;
+    }
+
+    @Override
+    public List<PurchaseOrder> getOrdersNotDeleted() {
+          List<PurchaseOrder> list = getCurrentSession().createQuery("FROM PurchaseOrder a where a.deleteDatetime IS NULL ORDER BY a.recordId ASC").list();
+        return list;
+    }
+
+    @Override
+    public List<PurchaseRequest> getRequestAgreed() {
+       List<PurchaseRequest> list = getCurrentSession().createQuery("FROM PurchaseRequest a where a.agreed = 1 and a.deleteDatetime IS NULL ORDER BY a.recordId ASC").list();
+       return list;
+    }
+
+    @Override
+    public List<PurchaseInvoice> getInvoicesNotDeleted() {
+       List<PurchaseInvoice> list = getCurrentSession().createQuery("FROM PurchaseInvoice a where a.deleteDatetime IS NULL ORDER BY a.recordId ASC").list();
+       return list;
+    }
+
+    @Override
+    public List<PurchasePayment> getPaymentsNotDeleted() {
+         List<PurchasePayment> list = getCurrentSession().createQuery("FROM PurchasePayment a where a.deleteDatetime IS NULL ORDER BY a.recordId ASC").list();
+       return list;
     }
 
 }

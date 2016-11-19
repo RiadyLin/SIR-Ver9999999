@@ -49,8 +49,8 @@ public class PurchaseRequest implements Serializable {
     @Column(name = "date_needed")
     @Temporal(TemporalType.DATE)
     private Date dateNeeded;
-    @Column(name = "agreed_by_top_management")
-    private Boolean agreedByTopManagement;
+    @Column(name = "agreed")
+    private Boolean agreed;
     @Column(name = "note")
     private String note;
     @Column(name = "record_version")
@@ -150,12 +150,12 @@ public class PurchaseRequest implements Serializable {
         this.dateNeeded = dateNeeded;
     }
 
-    public Boolean getAgreedByTopManagement() {
-        return agreedByTopManagement;
+    public Boolean getAgreed() {
+        return agreed;
     }
 
-    public void setAgreedByTopManagement(Boolean agreedByTopManagement) {
-        this.agreedByTopManagement = agreedByTopManagement;
+    public void setAgreed(Boolean agreed) {
+        this.agreed = agreed;
     }
 
     public String getNote() {

@@ -11,12 +11,14 @@ import com.sumames.sir.entity.PurchaseRequestDetail;
 import com.sumames.sir.entity.Employer;
 import com.sumames.sir.entity.Journal;
 import com.sumames.sir.entity.JournalDetail;
+
 import com.sumames.sir.entity.PurchaseInvoice;
 import com.sumames.sir.entity.PurchasePaymentInvoice;
 import com.sumames.sir.entity.PurchasePayment;
 import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.AutoCompletion;
 import com.sumames.sir.helper.Support;
+import com.sumames.sir.ui.renderer.DoubleCellRenderer;
 import com.sumames.sir.ui.renderer.TableCellListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -29,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -58,7 +61,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         initComponents();
         loadingData();
         addRowAfter();
-
+        nullifyTableValue();
     }
 
     /**
@@ -92,9 +95,6 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         tfTotal = new javax.swing.JTextField();
-        rbcash = new javax.swing.JRadioButton();
-        rbgiro = new javax.swing.JRadioButton();
-        rbbank = new javax.swing.JRadioButton();
 
         setFont(new java.awt.Font("Noto Serif", 0, 14)); // NOI18N
         setOpaque(false);
@@ -131,7 +131,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Record Id", "PayableValue", "Cash_Transaction", "BankTransaction", "GiroTransaction","TotalPayment","Note"
+                "Record Id", "Payable Value", "Cash Transaction", "Bank Transaction", "Giro Transaction","Total Payment","Note"
             }
         ) {
             Class[] types = new Class [] {
@@ -163,12 +163,11 @@ public class PurchasePaymentData extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tbPurchasePaymentKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tbPurchasePaymentKeyReleased(evt);
+            }
         });
         jScrollPane2.setViewportView(tbPurchasePayment);
-        if (tbPurchasePayment.getColumnModel().getColumnCount() > 0) {
-            tbPurchasePayment.getColumnModel().getColumn(0).setMinWidth(0);
-            tbPurchasePayment.getColumnModel().getColumn(0).setMaxWidth(0);
-        }
 
         btDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/sumames/sir/resources/image/buttons/4-01.png"))); // NOI18N
         btDelete.setBorder(null);
@@ -214,12 +213,6 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         tfTotal.setEnabled(false);
         tfTotal.setPreferredSize(new java.awt.Dimension(100, 30));
 
-        rbcash.setText("Cash");
-
-        rbgiro.setText("Giro");
-
-        rbbank.setText("Bank");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -252,17 +245,11 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(rbcash)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rbbank))
-                                    .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(rbgiro))))
+                                .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(btSave, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -303,15 +290,9 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel9)
                                     .addComponent(tfTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(rbcash)
-                                    .addComponent(rbbank))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(rbgiro))))
+                                .addGap(48, 48, 48))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -329,9 +310,10 @@ public class PurchasePaymentData extends javax.swing.JPanel {
             this.prRecordId = 0;
         } else {
             this.prRecordId = invoiceno.get(cbInvoiceNo.getSelectedItem());
-            System.out.println(prRecordId);
+           
         }
         getTotal();
+        cellrenderer();
     }//GEN-LAST:event_cbInvoiceNoActionPerformed
 
     private void cbInvoiceNoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbInvoiceNoItemStateChanged
@@ -346,6 +328,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     }//GEN-LAST:event_cbInvoiceNoItemStateChanged
 
     private void tbPurchasePaymentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPurchasePaymentKeyPressed
+     cellrenderer();
         if (evt.getID() == KeyEvent.KEY_PRESSED) {
             if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
                 if (tbPurchasePayment.getSelectedRow() == tbPurchasePayment.getRowCount() - 1) {
@@ -353,7 +336,12 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                 }
             }
         }
+        
     }//GEN-LAST:event_tbPurchasePaymentKeyPressed
+
+    private void tbPurchasePaymentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbPurchasePaymentKeyReleased
+cellrenderer();
+    }//GEN-LAST:event_tbPurchasePaymentKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -372,9 +360,6 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JRadioButton rbbank;
-    private javax.swing.JRadioButton rbcash;
-    private javax.swing.JRadioButton rbgiro;
     private javax.swing.JTextArea taDescription;
     private javax.swing.JTable tbPurchasePayment;
     private javax.swing.JTextField tfNo;
@@ -390,112 +375,56 @@ public class PurchasePaymentData extends javax.swing.JPanel {
             if (AppUtil.getService().save(purchasePayment)) {
                 for (int i = 0; i < tbPurchasePayment.getRowCount(); i++) {
                     PurchasePaymentInvoice PaymentDetail = new PurchasePaymentInvoice();
+                    if(tbPurchasePayment.getValueAt(i, 2) != null){
+                   
+                    PaymentDetail.setPurchasePaymentRecordId(purchasePayment.getRecordId());
+//                    PaymentDetail.setPayableValue(Double.parseDouble(tbPurchasePayment.getValueAt(i, 1).toString()));
+                    PaymentDetail.setCashTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
+//                    PaymentDetail.setBankTransaction(0D);
+//                    PaymentDetail.setGiroTransaction(0D);
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 3) != null){
+                  
+                    PaymentDetail.setPurchasePaymentRecordId(purchasePayment.getRecordId());
+//                    PaymentDetail.setPayableValue(0D);
+//                    PaymentDetail.setCashTransaction(0D);
+                    PaymentDetail.setBankTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
+//                    PaymentDetail.setGiroTransaction(0D);
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 4) != null){
+                  
+                    PaymentDetail.setPurchasePaymentRecordId(purchasePayment.getRecordId());
+//                    PaymentDetail.setPayableValue(0D);
+//                    PaymentDetail.setCashTransaction(0D);
+//                    PaymentDetail.setBankTransaction(0D);
+                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 1) != null){
+                    
                     PaymentDetail.setPurchasePaymentRecordId(purchasePayment.getRecordId());
                     PaymentDetail.setPayableValue(Double.parseDouble(tbPurchasePayment.getValueAt(i, 1).toString()));
-                    PaymentDetail.setCashTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
-                    PaymentDetail.setBankTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
-                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+//                    PaymentDetail.setCashTransaction(0D);
+//                    PaymentDetail.setBankTransaction(0D);
+//                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
                     PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
                     PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
                     PaymentDetail.setCreateDatetime(new Date());
                     PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
                     AppUtil.getService().save(PaymentDetail);
-                }
-                    Journal jurnal = new Journal();
-                jurnal.setNo(Support.AutoNumber(AppUtil.getService().getJournalLast(), "J", Boolean.TRUE));
-                jurnal.setDate(new Date());
-                // 0 = Rent
-                // 1 = Purchase Invoice
-                jurnal.setTransactionFrom(1);
-                jurnal.setTransactionRecordId(recordId);
-                jurnal.setCreateDatetime(new Date());
-                jurnal.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
-                if (AppUtil.getService().save(jurnal)) {
-                    if(rbcash.isSelected()){
-                    JournalDetail jd = new JournalDetail();
-                    jd.setJournalRecordId(jurnal.getRecordId());
-                    jd.setAccountChartRecordId(37);
-                    jd.setRelation(tfNo.getText());
-                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
-                    jd.setCreditTransaction(0D);
-                    AppUtil.getService().save(jd);
-                    JournalDetail jd2 = new JournalDetail();
-                    jd2.setJournalRecordId(jurnal.getRecordId());
-                    jd2.setAccountChartRecordId(02);
-                    jd2.setRelation(tfSupplierName.getText());
-                    jd2.setDebetTransaction(0D);
-                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
-                    AppUtil.getService().save(jd2);
-                    jurnal.setDebetBase(jd.getDebetTransaction());
-                    jurnal.setCreditBase(jd2.getCreditTransaction());
-                    AppUtil.getService().save(jurnal);
-                }else if(rbbank.isSelected()){
-                     JournalDetail jd = new JournalDetail();
-                    jd.setJournalRecordId(jurnal.getRecordId());
-                    jd.setAccountChartRecordId(37);
-                    jd.setRelation(tfNo.getText());
-                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
-                    jd.setCreditTransaction(0D);
-                    AppUtil.getService().save(jd);
-                    JournalDetail jd2 = new JournalDetail();
-                    jd2.setJournalRecordId(jurnal.getRecordId());
-                    jd2.setAccountChartRecordId(04);
-                    jd2.setRelation(tfSupplierName.getText());
-                    jd2.setDebetTransaction(0D);
-                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
-                    AppUtil.getService().save(jd2);
-                    jurnal.setDebetBase(jd.getDebetTransaction());
-                    jurnal.setCreditBase(jd2.getCreditTransaction());
-                    AppUtil.getService().save(jurnal);
-                }else if(rbgiro.isSelected()){
-                     JournalDetail jd = new JournalDetail();
-                    jd.setJournalRecordId(jurnal.getRecordId());
-                    jd.setAccountChartRecordId(37);
-                    jd.setRelation(tfNo.getText());
-                    jd.setDebetTransaction(Double.parseDouble(tfTotal.getText()));
-                    jd.setCreditTransaction(0D);
-                    AppUtil.getService().save(jd);
-                    JournalDetail jd2 = new JournalDetail();
-                    jd2.setJournalRecordId(jurnal.getRecordId());
-                    jd2.setAccountChartRecordId(38);
-                    jd2.setRelation(tfSupplierName.getText());
-                    jd2.setDebetTransaction(0D);
-                    jd2.setCreditTransaction(Double.parseDouble(tfTotal.getText()));
-                    AppUtil.getService().save(jd2);
-                    jurnal.setDebetBase(jd.getDebetTransaction());
-                    jurnal.setCreditBase(jd2.getCreditTransaction());
-                    AppUtil.getService().save(jurnal);
-                }
-                }
-                msg("Save Done!");
-                Main.getFrame().getTab().removeTabAt(Main.getFrame().getTab().getSelectedIndex());
-
-            } else {
-                msg("Save Failed!");
-            }
-
-        } else if (option.equals("EDIT")) {
-            formToObject();
-            purchasePayment.setRecordId(recordId);
-            if (AppUtil.getService().save(purchasePayment)) {
-                for (int i = 0; i < tbPurchasePayment.getRowCount(); i++) {
-                    PurchasePaymentInvoice PaymentDetail = new PurchasePaymentInvoice();
-                    if (tbPurchasePayment.getValueAt(i, 0) != null) {
-                        PaymentDetail.setPurchasePaymentRecordId((Integer) tbPurchasePayment.getValueAt(i, 0));
-                    }
-                    PaymentDetail.setRecordId(Integer.parseInt(tbPurchasePayment.getValueAt(i, 0).toString()));
-                    PaymentDetail.setPayableValue(Double.parseDouble(tbPurchasePayment.getValueAt(i, 1).toString()));
-                    PaymentDetail.setCashTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
-                    PaymentDetail.setBankTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
-                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
-                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
-                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
-                    PaymentDetail.setCreateDatetime(new Date());
-                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
-                    AppUtil.getService().save(PaymentDetail);
-                }
-                
-                     Journal jurnal = new Journal();
+                }}
+                  Journal jurnal = new Journal();
                 jurnal.setNo(Support.AutoNumber(AppUtil.getService().getJournalLast(), "J", Boolean.TRUE));
                 jurnal.setDate(new Date());
                 // 0 = Rent
@@ -563,6 +492,134 @@ public class PurchasePaymentData extends javax.swing.JPanel {
                     }
                       }
                 }
+                msg("Save Done!");
+                Main.getFrame().getTab().removeTabAt(Main.getFrame().getTab().getSelectedIndex());
+
+            } else {
+                msg("Save Failed!");
+            }
+
+        } else if (option.equals("EDIT")) {
+            formToObject();
+            purchasePayment.setRecordId(recordId);
+            System.out.println("record id = c" + recordId);
+            if (AppUtil.getService().save(purchasePayment)) {
+                for (int i = 0; i < tbPurchasePayment.getRowCount(); i++) {
+                    PurchasePaymentInvoice PaymentDetail = new PurchasePaymentInvoice();
+                    if (tbPurchasePayment.getValueAt(i, 0) != null) {
+                        PaymentDetail.setPurchasePaymentRecordId((Integer) tbPurchasePayment.getValueAt(i, 0));
+                    }
+                      if(tbPurchasePayment.getValueAt(i, 2) != null){
+                   PaymentDetail.setRecordId(Integer.parseInt(tbPurchasePayment.getValueAt(i, 0).toString()));
+//                    PaymentDetail.setPayableValue(0D);
+                    PaymentDetail.setCashTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
+//                    PaymentDetail.setBankTransaction(0D);
+//                    PaymentDetail.setGiroTransaction(0D);
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 3) != null){
+                  
+                   PaymentDetail.setRecordId(Integer.parseInt(tbPurchasePayment.getValueAt(i, 0).toString()));
+//                    PaymentDetail.setPayableValue(0D);
+//                    PaymentDetail.setCashTransaction(0D);
+                    PaymentDetail.setBankTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
+//                    PaymentDetail.setGiroTransaction(0D);
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 4) != null){
+                  
+                  PaymentDetail.setRecordId(Integer.parseInt(tbPurchasePayment.getValueAt(i, 0).toString()));
+//                    PaymentDetail.setPayableValue(0D);
+//                    PaymentDetail.setCashTransaction(0D);
+//                    PaymentDetail.setBankTransaction(0D);
+                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }if(tbPurchasePayment.getValueAt(i, 1) != null){
+                    
+                  PaymentDetail.setRecordId(Integer.parseInt(tbPurchasePayment.getValueAt(i, 0).toString()));
+                    PaymentDetail.setPayableValue(Double.parseDouble(tbPurchasePayment.getValueAt(i, 1).toString()));
+//                    PaymentDetail.setCashTransaction(0D);
+//                    PaymentDetail.setBankTransaction(0D);
+//                    PaymentDetail.setGiroTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+                    PaymentDetail.setTotalPayment(Double.parseDouble(tbPurchasePayment.getValueAt(i, 5).toString()));
+                    PaymentDetail.setNote(tbPurchasePayment.getValueAt(i, 6).toString());
+                    PaymentDetail.setCreateDatetime(new Date());
+                    PaymentDetail.setCreateByUserRecordId(Main.getFrame().getLogin().getEmployeeRecordId());
+                    AppUtil.getService().save(PaymentDetail);
+                }}
+                
+                 Journal jurnal = AppUtil.getService().getJournalByTransactionId(1, recordId);
+                if (AppUtil.getService().deleteJournalDetail(jurnal.getRecordId())) {
+                       JournalDetail jd = new JournalDetail();
+                      for (int i = 0; i < tbPurchasePayment.getRowCount(); i++) {
+                          if(tbPurchasePayment.getValueAt(i, 2) != null ) {              
+                    jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,2).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(02);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 2).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                          }
+                    if(tbPurchasePayment.getValueAt(i, 3) != null){
+                         jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,3).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(04);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 3).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                    }
+                    if(tbPurchasePayment.getValueAt(i, 4) != null){
+                         jd.setJournalRecordId(jurnal.getRecordId());
+                    jd.setAccountChartRecordId(37);
+                    jd.setRelation(tfNo.getText());
+                    jd.setDebetTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i,4).toString()));
+                    jd.setCreditTransaction(0D);
+                    AppUtil.getService().save(jd);
+                    JournalDetail jd2 = new JournalDetail();
+                    jd2.setJournalRecordId(jurnal.getRecordId());
+                    jd2.setAccountChartRecordId(38);
+                    jd2.setRelation(tfSupplierName.getText());
+                    jd2.setDebetTransaction(0D);
+                    jd2.setCreditTransaction(Double.parseDouble(tbPurchasePayment.getValueAt(i, 4).toString()));
+                    AppUtil.getService().save(jd2);
+                    jurnal.setDebetBase(jd.getDebetTransaction());
+                    jurnal.setCreditBase(jd2.getCreditTransaction());
+                    AppUtil.getService().save(jurnal);
+                    }
+                      }
+                }
+                
+                   
                 msg("Save Done!");
                 Main.getFrame().getTab().removeTabAt(Main.getFrame().getTab().getSelectedIndex());
             } else {
@@ -744,8 +801,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
     }
 
     public void refreshTable() {
-        List<PurchasePaymentInvoice> list = AppUtil.getService().getListPaymentInvoiceById(recordId);
-        System.out.println("Record id = " + recordId);
+        List<PurchasePaymentInvoice> list = AppUtil.getService().getListPaymentInvoiceById(recordId);     
         DefaultTableModel dtm = (DefaultTableModel) tbPurchasePayment.getModel();
         dtm.setRowCount(0);
         for (PurchasePaymentInvoice rd : list) {
@@ -758,7 +814,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
         AutoCompletion.enable(cbInvoiceNo);
         addRow();
 
-        List<PurchaseInvoice> invoicelist = AppUtil.getService().getInvoices();
+        List<PurchaseInvoice> invoicelist = AppUtil.getService().getInvoicesNotDeleted();
         for (PurchaseInvoice invoice : invoicelist) {
             invoiceno.put(invoice.getNo(), invoice.getRecordId());
             cbInvoiceNo.addItem(invoice.getNo());
@@ -769,7 +825,7 @@ public class PurchasePaymentData extends javax.swing.JPanel {
 
         }
         if (option.equals("NEW")) {
-            tfNo.setText("");
+            tfNo.setText(Support.AutoNumber(AppUtil.getService().getPurchasePaymentLast(), "PP", Boolean.TRUE));
             taDescription.setText("");
             dtDate.setDate(new Date());
         } else if (option.equals("EDIT")) {
@@ -778,7 +834,25 @@ public class PurchasePaymentData extends javax.swing.JPanel {
             refreshTable();
         }
     }
-
+    public void nullifyTableValue(){
+       for (int i = 0; i < tbPurchasePayment.getRowCount(); i++){
+        tbPurchasePayment.setValueAt(0.00, i, 1);
+        tbPurchasePayment.setValueAt(0.00, i, 2);
+         tbPurchasePayment.setValueAt(0.00, i, 3);
+          tbPurchasePayment.setValueAt(0.00, i, 4);
+           tbPurchasePayment.setValueAt(0.00, i, 5);
+           
+       }
+   }
+ public void cellrenderer(){
+        TableColumnModel m = tbPurchasePayment.getColumnModel();
+        DoubleCellRenderer dcr = new DoubleCellRenderer();
+        m.getColumn(1).setCellRenderer(dcr);
+        m.getColumn(2).setCellRenderer(dcr);
+        m.getColumn(3).setCellRenderer(dcr);
+        m.getColumn(4).setCellRenderer(dcr);
+        m.getColumn(5).setCellRenderer(dcr);
+    }
     private void msg(String msg) {
         JOptionPane.showMessageDialog(null, msg);
     }

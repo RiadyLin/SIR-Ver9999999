@@ -9,6 +9,7 @@ import com.sumames.sir.Main;
 import com.sumames.sir.entity.Customer;
 import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.AutoCompletion;
+import com.sumames.sir.helper.Support;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -301,7 +302,7 @@ public class CustomerData extends javax.swing.JPanel {
             }
         }
         if (option.equals("NEW")) {
-            tfID.setText("");
+            tfID.setText(Support.AutoNumber(AppUtil.getService().getCustomerLast(), "C", Boolean.FALSE));
             tfName.setText("");
             taAddress.setText("");
             tfNoTelp.setText("");

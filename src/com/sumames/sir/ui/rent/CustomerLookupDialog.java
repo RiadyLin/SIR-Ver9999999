@@ -35,7 +35,7 @@ public class CustomerLookupDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         tblCustomer.setAutoCreateColumnsFromModel(false);
         tblCustomer.getSelectionModel().addListSelectionListener(new CustomerSelectionListener());
-        customers = AppUtil.getService().getCustomers();
+        customers = AppUtil.getService().getCustomersNotDeleted();
         tblCustomer.setModel(new CustomerTableModel(customers));
     }
 

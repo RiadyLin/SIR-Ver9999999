@@ -333,7 +333,12 @@ public class RentList extends javax.swing.JPanel {
             Customer c = AppUtil.getService().getCustomerById(p.getCustomerProfilesRecordId());
             switch (columnIndex) {
                 case 0:
-                    return p.getRecordId();
+                    int a = p.getRecordId();
+//                    if(p.getReturned() == true){
+//                       columnIndex = 8; 
+//                    }else{
+                    return a;
+//                    }
                 case 1:
                     return p.getNo();
                 case 2:
@@ -358,6 +363,8 @@ public class RentList extends javax.swing.JPanel {
                     return p.getDiscount();
                 case 7:
                     return p.getTotal();
+                case 8:
+                    return "";
                 default:
                     return "";
             }

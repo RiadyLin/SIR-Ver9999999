@@ -11,11 +11,13 @@ import com.sumames.sir.entity.Ledger;
 import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.AutoCompletion;
 import com.sumames.sir.helper.Support;
+import com.sumames.sir.ui.renderer.DoubleCellRenderer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -246,6 +248,10 @@ public class LedgerList extends javax.swing.JPanel {
     private void refreshTable() {
         Ledgers = AppUtil.getService().getLedgerByAccId(dtStart.getDate(), dtEnd.getDate(), accId.get(cbAcc.getSelectedItem()));
         tbLedger.setModel(new LedgerTableModel(Ledgers));
+         TableColumnModel m = tbLedger.getColumnModel();
+        DoubleCellRenderer dcr = new DoubleCellRenderer();
+        m.getColumn(6).setCellRenderer(dcr);
+        m.getColumn(7).setCellRenderer(dcr);
         tbLedger.getColumnModel().getColumn(0).setMinWidth(0);
         tbLedger.getColumnModel().getColumn(0).setMaxWidth(0);
     }

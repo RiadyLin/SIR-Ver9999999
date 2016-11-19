@@ -11,6 +11,7 @@ import com.sumames.sir.entity.Login;
 import com.sumames.sir.entity.LoginAccess;
 import com.sumames.sir.helper.AppUtil;
 import com.sumames.sir.helper.AutoCompletion;
+import com.sumames.sir.helper.Support;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -364,7 +365,7 @@ public class EmployerData extends javax.swing.JPanel {
             cbStatus.addItem(loginAccess.getName());
         }
         if (option.equals("NEW")) {
-            tfID.setText("");
+            tfID.setText(Support.AutoNumber(AppUtil.getService().getCustomerLast(), "Emp", Boolean.FALSE));
             tfName.setText("");
             taAddress.setText("");
             tfNoTelp.setText("");
